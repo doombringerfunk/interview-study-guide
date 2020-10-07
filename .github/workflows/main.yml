@@ -31,7 +31,7 @@ jobs:
       run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/doombringerfunk/myprep:'${TAG}'|' $GITHUB_WORKSPACE/k8s.yaml
 
     - name: Save DigitalOcean kubeconfig
-      run: doctl kubernetes cluster kubeconfig save do-nyc1-homeworld
+      run: doctl kubernetes cluster kubeconfig save homeworld
 
     - name: Deploy to DigitalOcean Kubernetes
       run: kubectl apply -f $GITHUB_WORKSPACE/k8s.yaml
