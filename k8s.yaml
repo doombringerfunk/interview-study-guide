@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myprep
+  namespace: myprep
   labels:
     app: myprep
 spec:
@@ -18,24 +19,24 @@ spec:
     metadata:
       labels:
         app: myprep
+        namespace: myprep
     spec:
       containers:
       - name: myprep
         image: <IMAGE>
         ports:
-        - containerPort: 5000
+        - containerPort: 3000
         resources:
           requests:
             cpu: 100m
           limits:
             cpu: 100m
-      imagePullSecrets:
-      - name: registry-asb
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: myprep-service
+  namespace: myprep
   annotations:
     # external-dns.alpha.kubernetes.io/hostname: "doctl-action.do-api.dev"
     # service.beta.kubernetes.io/do-loadbalancer-certificate-id: "14cf21de-04d0-4241-8b3e-9b79575a3d09"
@@ -45,7 +46,29 @@ spec:
   ports:
     - name: https
       protocol: TCP
-      port: 443
-      targetPort: 5000
+      port: 3000
+      targetPort: 3000
   selector:
     app: myprep
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: myprep
+  namespace: myprep
+spec:
+  rules:
+  - host: interviewstudyguide.com
+    http:
+      paths:
+      - backend:
+          serviceName: myprep-service
+          servicePort: 3000
+        path: /
+  # This section is only required if TLS is to be enabled for the Ingress
+  # tls:
+  # - hosts:
+  #   - interviewstudyguide.com
+  #   secretName: example-tls
