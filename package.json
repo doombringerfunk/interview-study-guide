@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --harmony-async-await index.js"
+    "start": "forever start index.js"
   },
   "engines": {
     "node": "7.5.0"
@@ -19,6 +19,7 @@
     "body-parser": "^1.16.1",
     "case": "^1.4.2",
     "express": "^4.14.1",
+    "forever": "^3.0.2",
     "highlight.js": "^9.9.0",
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
